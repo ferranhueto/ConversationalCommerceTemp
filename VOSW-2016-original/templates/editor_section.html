@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Very Open Student Ware</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery-ui.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='editor.css') }}">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename="/Content/MIT.ico") }}" />
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+
+    <script>
+
+        $(document).ready(function() {
+            //Accordion Structure
+            var list1 = [];
+            {% for item in videos %}
+                list1.push('{{ item }}');
+             {% endfor %}
+        var list = [];
+        for (i = 0; i<list1.length;i++) {
+            list[i]=list1[i].replace(/&#34;/g,'');
+        }
+
+        var pist1 = [];
+            {% for item in slides %}
+                pist1.push('{{ item }}');
+             {% endfor %}
+        var pist = [];
+        for (i = 0; i<pist1.length;i++) {
+            pist[i]=pist1[i].replace(/&#34;/g,'');
+        }
+
+        var src = '/static/Content/IoT/Activities/' + list[0] + '.mp4';
+        var src2 = '/static/Content/IoT/Activities/' + pist[0] + '.jpg';
+
+        $('#video').attr('src', src);
+         $('.mySlides').attr('src', src2);
+
+
+
+
+
+        var l = list.length;
+        var c = 0;
+        var s = 1;
+        var target = $('#video-links > ul');
+
+        for (i = 0; i<l; i++) {
+            var m=i+1;
+            target.append('<li><div style="position: relative;" id="button"><button onclick="change_video(this)" id="'+list[i]+'" class="link">'+list[i]+'.mp4</button><button id="'+list[i]+'" class="delete" onclick="delete_object(this)">x</button></div><br/></li>');
+        }
+            target.append('<li><br/><label for="video-upload" class="link">+</label></li><li><br/><form id="videoupload" method=post enctype=multipart/form-data><input type="file" id="video-upload" accept="video/mp4" value="Video"></form></li>');
+
+
+        l = pist.length;
+        c = 0;
+        s = 1;
+        target = $('#slides-links');
+
+        for (i = 0; i<l; i++) {
+            m=i+1;
+            target.append('<li><div style="position: relative;" id="button2"><button onclick="change_slide(this)" id="'+pist[i]+'" class="link">'+pist[i]+'.jpg</button><button id="'+pist[i]+'" class="delete" onclick="delete_object(this, "Slide")">x</button></div><br/></li>');
+        }
+
+            target.append('<li><br/><label for="image-upload" class="link">+</label></li><li><br/><form id="imageupload" method=post enctype=multipart/form-data><input type="file" id="image-upload" accept="image/jpg" value="Image"></form></li>');
+
+            target.sortable({
+            cancel: ''
+        });
+
+
+        $('#vid-links').sortable({
+            cancel: ''
+        });
+
+        });
+
+        document.getElementById("video-upload").onchange = function() {
+            add_object('Video');
+            document.getElementById("videoupload").submit();
+        };
+
+        document.getElementById("image-upload").onchange = function() {
+            add_object('Slide');
+    document.getElementById("imageupload").submit('Slide');
+};
+
+
+    function go_to(m) {
+        var b = window.location + '/' + m;
+        window.location.replace(b)
+    }
+
+    function change_video(object) {
+        var p = object.id;
+        var src = '/static/Content/IoT/Activities/' + p + '.mp4';
+        $('#video').attr('src', src);
+    }
+
+    function change_slide(object) {
+        var p = object.id;
+        var src = '/static/Content/IoT/Activities/' + p + '.jpg';
+        $('.mySlides').attr('src', src);
+    }
+        function add_object(type) {
+        var pid = {{ pid }};
+        $.ajax({
+        type: "POST",
+        url: "/upload",
+        data: JSON.stringify({pid: pid , activity_type: type}),
+        contentType: 'application/json;charset=UTF-8',
+        success: function() {
+        alert('Added!'); },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        alert("Error: " + errorThrown); }
+});
+
+        }
+
+        function delete_object(object) {
+        var id = object.id;
+        var action = 1;
+            var type ='Video';
+        var pid = {{ pid }};
+        $.ajax({
+        type: "POST",
+        url: "/edit",
+        data: JSON.stringify({pid: pid, id: id, action: action, activity_type: type}),
+        contentType: 'application/json;charset=UTF-8',
+        success: function() {
+            var a = document.URL;
+            window.location.replace(a);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        alert("Error: " + errorThrown); }
+});
+
+        }
+
+
+
+    </script>
+
+</head>
+<body>
+<header>
+    <div id="Menu">
+        <ul>
+            <li><a href="#"><img src="{{ url_for('static', filename="Content/MIT.png") }}" height="20px"/></a></li>
+            <li class="item"><a href="#">Menu</a></li>
+            <li class="item"><a href="/IoT/1/1/1">IoT Course</a></li>
+            <li class="item"><a href="/IoT/edit">Course editor</a></li>
+            <li class="item"><a href="#">About</a></li>
+            <li class="item"><a href="/save_to_dbx">Save Course to Dropbox</a></li>
+            <li class="logout"><a href="/logout">Log out</a></li>
+        </ul>
+    </div>
+</header>
+<br/><br/><br/>
+<div id="Workspace">
+    <h1>Chapter {{ chapter }}: {{ c }}</h1>
+    <h2>Section {{ section }}: {{ s }}</h2>
+</div>
+<br/>
+<div id="Workspace">
+    <h4>Video Editor</h4>
+    <br/>
+    <div id="video-index">
+        <div id="video-links">
+            <ul id="vid-links">
+            </ul>
+        </div>
+        <div id="video-display">
+            <video id="video" controls>
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+    </div>
+</div>
+<br/>
+<div id="Workspace">
+    <h4>Image Editor</h4>
+    <div id="slides-index">
+        <div id="slide-links">
+            <ul id="slides-links">
+
+            </ul>
+        </div>
+        <div id="slides">
+            <img class="mySlides" src="">
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>

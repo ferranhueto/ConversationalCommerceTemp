@@ -1,0 +1,131 @@
+
+* {
+    font-family: sans-serif;
+
+}
+
+::-moz-selection{
+    background-color:Transparent;
+    color:#000;
+    }
+
+    ::selection {
+    background-color:Transparent;
+    color:#000;
+    }
+body {
+    background-color: whitesmoke;
+}
+#section
+{
+    padding: 20px;
+    margin: auto;
+    width: 800px;
+    border-style: solid;
+    border-color: darkred;
+    border-width: 1px;
+    background-color: lightgrey;
+}
+
+canvas
+{
+    position: absolute;
+    border-style: solid;
+    border-color: darkred;
+    border-width: 1px;
+    margin-top: 10px;
+    /*background:url(example.png);*/
+}
+
+img {
+    margin: 10px auto 0px;
+    z-index: 30;
+
+}
+
+#flashcard {
+    align-content: center;
+    margin: 10px auto 0px;
+    display: block;
+}
+button
+{
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+}
+
+#drawingTools
+{
+    width: 800px;
+
+    margin: 0 auto;
+}
+
+#toolType
+{
+    width: 100%;
+    height: 30px;
+    margin: 0 auto;
+}
+
+#toolType button
+{
+    width: 24.5%;
+    margin-top: 10px;
+    color: darkred;
+    background-color: ghostwhite;
+    border-style: solid;
+    border-width: 1px;
+    border-color: darkred;
+
+}
+
+#toolType button:hover {opacity: 0.5;}
+
+#colors
+{
+    width: 100%;
+    height: 20px;
+}
+
+#colors button
+{
+    width: 20%;
+    height: 10px;
+    margin-top: 5px;
+    float: left;
+}
+
+#colors button:hover {opacity: 0.5;}
+
+#black { background:black;}
+#white { background:white;}
+#red { background:indianred;}
+#blue { background:dodgerblue;}
+#green { background:mediumseagreen;}
+
+#otherTools
+{
+    width: 100%;
+    height: 60px;
+    float: right;
+    z-index: 100;
+}
+
+#otherTools button
+{
+    width: 100%;
+    height: 30px;
+    margin-top: 5px;
+    background: #303030;
+    color: white;
+    font: 25px impact;
+    cursor: pointer;
+}
+#otherTools button:hover { opacity: 0.5;}
+
+#textinput {
+    display: inline-block;
+    width: 100%;
+}

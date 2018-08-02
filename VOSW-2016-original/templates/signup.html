@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='general_course.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename="\Content\MIT.ico") }}" />
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+</head>
+
+<header>
+    <div id="Menu">
+        <ul>
+            <li><a href="#"><img src="{{ url_for('static', filename="Content/MIT.png") }}" height="20px"/></a></li>
+            <li class="item"><a href="#">Menu</a></li>
+            <li class="item"><a href="#">Courses</a></li>
+            <li class="item"><a href="#">Account</a></li>
+            <li class="item"><a href="#">About</a></li>
+            <li class="item"><a href="/save_to_dbx">Save Course to Dropbox</a></li>
+            <li class="logout"><a href="/login">Log in</a></li>
+        </ul>
+    </div>
+</header>
+</head>
+
+<body>
+
+<h1>Sign up</h1>
+<form action="" method="POST">
+    <input type="text" name="username" placeholder="Username" value = "{{ request.form.username }}">
+    <input type="text" name="email" placeholder="Email" value = "{{ request.form.email }}">
+    <br/>
+    <input type="password" name="password" placeholder="Password" value = "{{ request.form.password }}">
+    <input type="password" name="confirm" placeholder="Confirm Password" value = "{{ request.form.confirm }}">
+    <br/>
+    <input type="submit" value="Sign Up">
+</form>
+{% if error %}
+    <p> <strong>Error:</strong> {{ error }}</p>
+{% endif %}
+
+{% for messages in get_flashed_messages() %}
+    <p>{{ messages }}</p>
+{% endfor %}
+
+</body>
+</html>

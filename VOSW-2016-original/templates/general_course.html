@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Very Open Student Ware</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='general_course.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename="/Content/MIT.ico") }}" />
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function() {
+        $( "#nav" ).accordion({
+        heightStyle: "content",
+        collapsible: true
+    });
+        var path = window.location.pathname;
+
+        var target = $('h4 a[href="'+path+'"]');
+
+            target.addClass('menu-show');
+
+            var pages = {{ vidcount }};
+            var pageButtons = $('#video-buttons');
+            var pageButtons2 = $('#video-buttons2');
+            for (var i = 1; i <= pages; i++) {
+                pageButtons2.append('<button class="video-buttons" id="'+i+'" onClick="addVideo(this)"> + </button>');
+                if (i == {{ m }}) {
+                    pageButtons.append('<button class="video-buttons-select" id="'+i+'" onClick="changeVideo(this)">' + i + '</button>');
+
+                }
+                else {
+                    pageButtons.append('<button class="video-buttons" id="'+i+'" onClick="changeVideo(this)">' + i + '</button>');
+                }
+            }
+        });
+
+
+    </script>
+    <script>
+
+
+        function changeVideo(object) {
+            var a = document.URL;
+            var c = parseInt(a.split('/').pop());
+            if (c < 10) {
+                var b = a.slice(0, -1);
+            }
+            else {
+                var b = a.slice(0,-2);
+            }
+            var b = b + object.id;
+
+            window.location.replace(b)
+        }
+
+        function addVideo(object) {
+            var b = '/static/Content/IoT/Activities/';
+            var c = parseInt(object.id)-1;
+
+            b = b +{{ l }}[c] + '.mp4';
+            var addvideo = $('#add-video');
+            addvideo.remove();
+            $('<div id="add-video"></div>').insertAfter($('#video'));
+            var addvideo2 = $('#add-video');
+            addvideo2.append('<br/><div id="close"><button onclick=remove() class="close">x</button></div><video id="add-video" controls><source src="'+b+'" type="video/mp4"> </video>');
+            addvideo2.draggable();
+            addvideo2.resizable();
+
+        }
+
+        function layout(button) {
+            if (button.id == "button2") {
+                $('#video').toggle();
+                $('#button2').toggleClass('hide');
+            }
+            else if (button.id == "button1") {
+                $('#slides').toggle();
+                $('#button1').toggleClass('hide');
+            }
+
+        }
+
+        function remove() {
+            $('#add-video').remove()
+        }
+
+        function resize_canvas() {
+            canvas = document.getElementById("canvas");
+            canvas.width = $('.img').css('width');
+            document.write()
+        }
+
+
+
+
+        $( document ).ready(function() {
+            $('#slides').draggable();
+            $('#slides').resizable();
+            $('#video').draggable();
+            $('#video').resizable();
+
+});
+    </script>
+</head>
+<body onresize="resize_canvas()">
+<header>
+    <div id="Menu">
+        <ul>
+            <li><a href="#"><img src="{{ url_for('static', filename="Content/MIT.png") }}" height="20px"/></a></li>
+            <li class="item"><a href="#">Menu</a></li>
+            <li class="item"><a href="/IoT/P1_Introduction/1_IoTandTheConnectedWorld/1">IoT Course</a></li>
+            <li class="item"><a href="#">Account</a></li>
+            <li class="item"><a href="#">About</a></li>
+            <li class="item"><a href="/save_to_dbx">Save Course to Dropbox</a></li>
+            <li class="logout"><a href="/logout">Log out</a></li>
+        </ul>
+    </div>
+</header>
+
+<table>
+<tr>
+<div id="workspace">
+<div id="sidebar">
+<div id="nav">
+    <h3>Introduction</h3>
+    <div>
+        <h4><a href="/IoT/P1_Introduction/1_IoTandTheConnectedWorld/1" class="selector">IoT and the Connected World</a></h4>
+        <h4><a href="#" class="selector">Discussion 1</a></h4>
+        <h4><a href="#">Assessment 1</a></h4>
+    </div>
+    <h3>Architectures</h3>
+    <div>
+        <h4><a href="/IoT/P2_Architectures/1_TheArchitectureOfIoT/1" class="selector">The Architecture of IoT</a></h4>
+        <h4><a href="/IoT/P2_Architectures/2_TheWebOfThings/1" class="selector">The Web of Things</a></h4>
+        <h4><a href="/IoT/P2_Architectures/3_LessonsFromTheInternet/1" class="selector">Lessons from the Internet</a></h4>
+        <h4><a href="#">Discussion 2</a></h4>
+        <h4><a href="#">Assessment 2</a></h4>
+    </div>
+    <h3>Technologies</h3>
+    <div>
+        <h4><a href="/IoT/P3_Technologies/1_NetworkAndConnectivityForIoT/1" class="selector">Network And Connectivity for IoT</a></h4>
+        <h4><a href="/IoT/P3_Technologies/2_DataProcessingAndStorage/1" class="selector">Data Processing and Storage</a></h4>
+        <h4><a href="/IoT/P3_Technologies/3_Localization/1" class="selector">Localization</a></h4>
+        <h4><a href="/IoT/P3_Technologies/4_SecurityInIoT/1" class="selector">Security in IoT</a></h4>
+        <h4><a href="/IoT/P3_Technologies/5_HCIInAnIoTWorld/1" class="selector">HCI in an IoT World</a></h4>
+        <h4><a href="/IoT/P3_Technologies/6_RoboticsAndAutonomousVehicles/1" class="selector">Robotics and Autonomous Vehicles</a></h4>
+        <h4><a href="#" class="selector">Discussion 3</a></h4>
+        <h4><a href="#" class="selector">Assessment 3</a></h4>
+    </div>
+    <h3>Applications</h3>
+    <div>
+        <h4><a href="/IoT/P4_Applications/1_BeyondIoT-UbiquitousSensingAndHumanExperience/1" class="selector">Beyond IoT - Ubiquitous Sensing and Human Experience</a></h4>
+        <h4><a href="/IoT/P4_Applications/2_WirelessTechnologiesForIndoorLocalizationSmartHomesandSmartHealth/1" class="selector">Wireless Technologies for Indoor Localization, Smart Homes, and Smart Health</a></h4>
+        <h4><a href="/IoT/P4_Applications/3_SmartCities/1" class="selector">Smart Cities</a></h4>
+        <h4><a href="#">Discussion 4</a></h4>
+        <h4><a href="#">Assessment 4</a></h4>
+    </div>
+    <h3>Conclusion</h3>
+    <div>
+        <h4><a href="/IoT/P5_Conclusion/1_RoadmapOfIoT/1" class="selector">Roadmap of IoT</a></h4>
+        <h4><a href="#" class="selector">Discussion 5</a></h4>
+        <h4><a href="#" class="selector">Assessment 5</a></h4>
+    </div>
+    </div>
+</div>
+</div>
+</tr>
+<tr>
+<br>
+<div id="location">
+<h5>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;{{ section }} > {{ chapter }} > Video {{ m }}</h5>
+</div>
+    <div id="work">
+        <div id="layout-selector">
+            <ul>
+                <li><h5>Layout Selector: </h5></li>
+                <li><button id="button1" class="show" onclick="layout(this)">Flashcards</button></li>
+                <li><button id="button2" class="show" onclick="layout(this)">Video</button></li>
+            </ul>
+        </div>
+    <br/>
+        <div id="video">
+            <div id="video-buttons"></div>
+            <div id="video-buttons2"></div>
+        <video id="video" controls>
+                <source src="{{ video }}" type="video/mp4">
+        </video>
+
+        </div>
+    <div id="add-video"></div>
+    <br/>
+
+        <div id="slides">
+
+
+                {% for s in source %}
+                    <img class="mySlides" src="{{ s }}">
+                 {% endfor %}
+        <br/>
+                <div id="slide-buttons">
+                <button class="slide-button" onclick="plusDivs(-1)">&#10094;</button>
+                <button class="slide-button" onclick="plusDivs(+1)">&#10095;</button>
+                <button class="editor-button" onclick="editor()">Edit this slide</button>
+                </div>
+
+        <br/>
+        <br/>
+        <br/>
+
+        </div>
+            <script>
+                var slideIndex = 1;
+                showDivs(slideIndex);
+
+                function plusDivs(n) {
+                showDivs(slideIndex += n);
+                }
+
+                function showDivs(n) {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                if (n > x.length) {slideIndex = 1}
+                if (n < 1) {slideIndex = x.length}
+                for (i = 0; i < x.length; i++) {
+                  x[i].style.display = "none";
+                }
+                x[slideIndex-1].style.display = "block";
+                }
+
+                function editor() {
+                    $('#section').css('display','block');
+                    var src = document.getElementsByClassName("mySlides")[slideIndex-1];
+                    src = src.src;
+                    $('.img').attr("src",src)
+                }
+            </script>
+
+
+
+    <div id="section">
+        <div id="drawingTools">
+            <div id="colors">
+                <button id="black" onclick="changeColor('black')"></button>
+                <button id="white" onclick="changeColor('white')"></button>
+                <button id="red" onclick="changeColor('indianred')"></button>
+                <button id="green" onclick="changeColor('mediumseagreen')"></button>
+                <button id="blue" onclick="changeColor('dodgerblue')"></button>
+            </div>
+            <div id="toolType">
+                <button id="pen" onclick="pen()">Pen</button>
+                <button id="clear" onclick="clearCanvas()">Eraser</button>
+                <button id="square" onclick="square()">Square</button>
+                <button id="save" onclick="saveCards()">Save</button>
+            </div>
+            <br/>
+            <div id="textinput">
+                <input type="text" id="text">
+                <button id="paste" onclick="something()">Write Text</button>
+                <p>Coordinates</p><input type="text" id="xpos"><input type="text" id="ypos">
+            </div>
+        </div>
+        <div id="flashcard">
+            <canvas id="canvas" width="800" height="500"></canvas>
+            <img class="img" src="{{ url_for('static', filename='Content/IoT/Activities/26574808.jpg') }}" width="802" height="502"/>
+        </div>
+
+        <script src="{{ url_for('static', filename='editor.js') }}"></script>
+
+    </div>
+    </div>
+    </div>
+</div>
+
+</tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Very Open Student Ware</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery-ui.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='editor.css') }}">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename="/Content/MIT.ico") }}" />
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+
+    <script>
+
+        $(document).ready(function() {
+            //Accordion Structure
+            var list1 = [];
+            {% for item in structure %}
+                list1.push('{{ item }}');
+             {% endfor %}
+        var list = [];
+        for (i = 0; i<list1.length;i++) {
+            list[i]=list1[i].replace(/&#34;/g,'');
+        }
+
+
+
+
+
+        var l = list.length;
+        var c = 0;
+        var s = 1;
+        var target = $('#chapters > ul');
+
+        for (i = 0; i<l; i++) {
+            var m=i+1;
+            target.append('<li><div style="position: relative;" id="button"><button onclick="go_to('+m+')" id="'+m+'" class="chapter">'+list[i]+'</button><button id="'+list[i]+'" class="delete" onclick="delete_object(this)">x</button></div><br/><br/><br/><br/><br/><br/></li>');
+        }
+
+            target.append('<li><div style="position: relative;" id="button"><button onclick="add_chapter()" id="add_chapter" class="chapter">+</button></div><br/><br/><br/><br/><br/><br/></li>');
+
+
+        $('#sortable').sortable({
+            cancel: ''
+        });
+
+        });
+
+    function go_to(m) {
+        var b = '/IoT/edit/' + m;
+        window.location.replace(b)
+    }
+
+    function add_chapter() {
+        var target = $('#chapters');
+        target.append('<br/><div style="position: relative;" id="button"><form id="add-chapter" action="/edit"><input height="100" type="text" placeholder="Chapter Name"/><br/><input type="submit"/></div><br/><br/><br/><br/><br/><br/>');
+    }
+
+    function delete_object(object) {
+        var id = object.id;
+        var action = 1;
+        var pid = 0;
+        var type = 2;
+        $.ajax({
+            type: "POST",
+            url: "/edit",
+            data: JSON.stringify({pid: pid, id: id, action: action, activity_type: type}),
+            contentType: 'application/json;charset=UTF-8',
+            success: function () {
+                var a = document.URL;
+                window.location.replace(a);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("Error: " + errorThrown);
+            }
+        });
+    }
+
+
+
+    </script>
+
+</head>
+<body>
+<header>
+    <div id="Menu">
+        <ul>
+            <li><a href="#"><img src="{{ url_for('static', filename="Content/MIT.png") }}" height="20px"/></a></li>
+            <li class="item"><a href="#">Menu</a></li>
+            <li class="item"><a href="/IoT/1/1/1">IoT Course</a></li>
+            <li class="item"><a href="/IoT/edit">Course editor</a></li>
+            <li class="item"><a href="#">About</a></li>
+            <li class="item"><a href="/save_to_dbx">Save Course to Dropbox</a></li>
+            <li class="logout"><a href="/logout">Log out</a></li>
+        </ul>
+    </div>
+</header>
+<br/><br/><br/>
+<div id="Workspace">
+    <h5>Course: Internet of Things</h5>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<div id="chapters">
+    <ul id="sortable" style="list-style: none;">
+
+    </ul>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+
+
+</body>
+</html>

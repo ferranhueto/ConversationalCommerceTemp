@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block navbar %}{% include "navbar.html" %}{% endblock %}
+
+{% block content %}
+
+<br/><br/><br/>
+<div id="text">
+<h1>Log In</h1>
+</div>
+<form action="" method="POST">
+    <input type="text" name="username" placeholder="username" value = "{{ request.form.username }}">
+    <input type="password" name="password" placeholder="password" value = "{{ request.form.password }}">
+    <input type="submit" class="LoginSubmit" value="Log in">
+</form>
+{% if error %}
+    <p> <strong>Error:</strong> {{ error }}</p>
+{% endif %}
+
+{% for messages in get_flashed_messages() %}
+    <p>{{ messages }}</p>
+{% endfor %}
+
+{% endblock %}
+

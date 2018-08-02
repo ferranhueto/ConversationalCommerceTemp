@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Safe area</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='pixlr.js') }}"></script>
+    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+</head>
+
+<body>
+
+    <h1>You are in the safe area!</h1>
+    <br>
+    <br>
+ <a href="javascript:pixlr.edit({image:'https://upload.wikimedia.org/wikipedia/commons/9/9d/MIT_Kresge_Auditorium.jpg', title:'Example image 3', service:'express', target:'http://developer.pixlr.com/save_post.php', exit:'http://osw.xvm.mit.edu/safe'});"><img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/MIT_Kresge_Auditorium.jpg" width="250" height="150" title="Edit in pixlr"></a>
+<form action="/upload-target" class="dropzone"></form>
+
+    <p>Go to the <a href="/slides/1">slides</a></p>
+
+    <p>Wanna <a href = "/logout">Logout</a>?</p>
+
+    {% for messages in get_flashed_messages() %}
+        {{ messages }}
+    {% endfor %}
+
+</body>
+</html>

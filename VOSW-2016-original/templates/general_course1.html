@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Very Open Student Ware</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='general_course.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename="/Content/MIT.ico") }}" />
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+
+    <script>
+
+        $(document).ready(function() {
+            //Accordion Structure
+            var list1 = [];
+            {% for item in structure %}
+                list1.push('{{ item }}');
+             {% endfor %}
+        var list = [];
+        for (i = 0; i<list1.length;i++) {
+            list[i]=list1[i].replace(/&#34;/g,'');
+        }
+
+
+
+
+
+        var l = list.length;
+        var accordion = $('#nav');
+        var c = 0;
+        var s = 1;
+
+        for (i = 1; i<l; i++) {
+            if (list[i] == 'C123') {
+                s = 1;
+            }
+            else if (list[i-1] == 'C123') {
+                c++;
+                accordion.append('<h3 class="accordion" id="item'+c.toString()+'">'+list[i]+'</h3>');
+                accordion.append('<div id='+c.toString()+'></div>');
+
+            }
+            else {
+                var blop = '#'+c.toString();
+                $(blop).append('<h4><a id="link'+c.toString()+s.toString()+'" href="/IoT/'+c.toString()+'/'+
+                        s.toString()+'/1" class="selector">'+list[i]+'</a></h4>');
+                s++;
+            }
+        }
+            accordion.accordion({
+        heightStyle: "content",
+                active: false,
+        collapsible: true
+    });
+
+            //Show current Menu
+        var target = '#item'+ {{ chapter }};
+        $(target).click();
+        var target2 = '#link' + {{ chapter }} + {{ section }};
+        $(target2).css('color','#616161');
+
+            //Add video buttons
+            var pages = {{ vidcount }};
+            var pageButtons = $('#video-buttons');
+            var pageButtons2 = $('#video-buttons2');
+            for (var i = 1; i <= pages; i++) {
+                pageButtons2.append('<button class="video-buttons" id="'+i+'" onClick="addVideo(this)"> + </button>');
+                if (i == {{ m }}) {
+                    pageButtons.append('<button class="video-buttons-select" id="'+i+'" onClick="changeVideo(this)">' + i + '</button>');
+
+                }
+                else {
+                    pageButtons.append('<button class="video-buttons" id="'+i+'" onClick="changeVideo(this)">' + i + '</button>');
+                }
+            }
+
+        });
+
+
+    </script>
+    <script>
+
+
+        function changeVideo(object) {
+            var a = document.URL;
+            var c = parseInt(a.split('/').pop());
+            if (c < 10) {
+                var b = a.slice(0, -1);
+            }
+            else {
+                var b = a.slice(0,-2);
+            }
+            b = b + object.id;
+
+            window.location.replace(b)
+        }
+
+        function addVideo(object) {
+            var b = '/static/Content/IoT/Activities/';
+            var c = parseInt(object.id)-1;
+
+            b = b +{{ l }}[c] + '.mp4';
+            var addvideo = $('#add-video');
+            addvideo.remove();
+            $('<div id="add-video"></div>').insertAfter($('#video'));
+            var addvideo2 = $('#add-video');
+            addvideo2.append('<br/><div id="close"><button onclick=remove() class="close">x</button></div><video id="add-video" controls><source src="'+b+'" type="video/mp4"> </video>');
+            addvideo2.draggable();
+            addvideo2.resizable();
+
+        }
+
+        function layout(button) {
+            if (button.id == "button2") {
+                $('#video').toggle();
+                $('#button2').toggleClass('hide');
+            }
+            else if (button.id == "button1") {
+                $('#slides').toggle();
+                $('#button1').toggleClass('hide');
+            }
+
+        }
+
+        function remove() {
+            $('#add-video').remove()
+        }
+
+
+
+
+        $( document ).ready(function() {
+            $('#slides').draggable();
+            $('#slides').resizable();
+            $('#video').draggable();
+            $('#video').resizable();
+
+});
+    </script>
+</head>
+<body>
+<header>
+    <div id="Menu">
+        <ul>
+            <li><a href="#"><img src="{{ url_for('static', filename="Content/MIT.png") }}" height="20px"/></a></li>
+            <li class="item"><a href="#">Menu</a></li>
+            <li class="item"><a href="/IoT/edit">Course Editor</a></li>
+            <li class="item"><a href="#">Account</a></li>
+            <li class="item"><a href="#">About</a></li>
+            <li class="item"><a href="/save_to_dbx">Save Course to Dropbox</a></li>
+            <li class="logout"><a href="/logout">Log out</a></li>
+        </ul>
+    </div>
+</header>
+
+<table>
+<tr>
+<div id="workspace">
+<div id="sidebar">
+<div id="nav">
+
+</div>
+</div>
+</div>
+</tr>
+<tr>
+<br>
+
+    <div id="work">
+        <div id="layout-selector">
+            <ul>
+                <li><h5>Layout Selector: </h5></li>
+                <li><button id="button1" class="show" onclick="layout(this)">Flashcards</button></li>
+                <li><button id="button2" class="show" onclick="layout(this)">Video</button></li>
+            </ul>
+        </div>
+    <br/>
+        <div id="video">
+            <div id="video-buttons"></div>
+            <div id="video-buttons2"></div>
+        <video id="video" controls>
+                <source src="{{ video }}" type="video/mp4">
+        </video>
+
+        </div>
+    <div id="add-video"></div>
+    <br/>
+
+        <div id="slides">
+
+
+                {% for s in source %}
+                    <img class="mySlides" src="{{ s }}">
+                 {% endfor %}
+        <br/>
+                <div id="slide-buttons">
+                <button class="slide-button" onclick="plusDivs(-1)">&#10094;</button>
+                <button class="slide-button" onclick="plusDivs(+1)">&#10095;</button>
+                <button class="editor-button" onclick="editor()">Edit this slide</button>
+                </div>
+
+        <br/>
+        <br/>
+        <br/>
+
+        </div>
+            <script>
+                var slideIndex = 1;
+                showDivs(slideIndex);
+
+                function plusDivs(n) {
+                showDivs(slideIndex += n);
+                }
+
+                function showDivs(n) {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                if (n > x.length) {slideIndex = 1}
+                if (n < 1) {slideIndex = x.length}
+                for (i = 0; i < x.length; i++) {
+                  x[i].style.display = "none";
+                }
+                x[slideIndex-1].style.display = "block";
+                }
+
+                function editor() {
+                    $('#section').css('display','block');
+                    var src = document.getElementsByClassName("mySlides")[slideIndex-1];
+                    src = src.src;
+                    $('.img').attr("src",src)
+                }
+            </script>
+
+
+
+    <div id="section">
+        <div id="drawingTools">
+            <div id="colors">
+                <button id="black" onclick="changeColor('black')"></button>
+                <button id="white" onclick="changeColor('white')"></button>
+                <button id="red" onclick="changeColor('indianred')"></button>
+                <button id="green" onclick="changeColor('mediumseagreen')"></button>
+                <button id="blue" onclick="changeColor('dodgerblue')"></button>
+            </div>
+            <div id="toolType">
+                <button id="pen" onclick="pen()">Pen</button>
+                <button id="clear" onclick="clearCanvas()">Eraser</button>
+                <button id="square" onclick="square()">Square</button>
+                <button id="save" onclick="saveCards()">Save</button>
+            </div>
+            <br/>
+            <div id="textinput">
+                <input type="text" id="text">
+                <button id="paste" onclick="something()">Write Text</button>
+                <p>Coordinates</p><input type="text" id="xpos"><input type="text" id="ypos">
+            </div>
+        </div>
+        <div id="flashcard">
+            <canvas id="canvas" width="800" height="500"></canvas>
+            <img class="img" src="{{ url_for('static', filename='Content/IoT/Activities/26574808.jpg') }}" width="802" height="502"/>
+        </div>
+
+        <script src="{{ url_for('static', filename='editor.js') }}"></script>
+
+    </div>
+    </div>
+    </div>
+</div>
+
+</tr>
+</table>
+
+</body>
+</html>

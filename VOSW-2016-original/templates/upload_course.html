@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Course</title>
+</head>
+<body>
+
+<div class="page-header">
+    Upload a course from a zip file. Valid zip follows a specific format.
+</div>
+<form enctype="multipart/form-data" method="POST">
+    <div class="form-group">
+        <label for="a1">zip file with directory structure:</label>
+        <input id="a1" type="file" name="zipfile" placeholder="attach" value="{{ request.form.zipfile }}">
+    </div>
+
+    <button type="submit" class="btn btn-default">OK</button>
+
+</form>
+
+</body>
+</html>
